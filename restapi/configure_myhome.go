@@ -4,6 +4,7 @@ package restapi
 
 import (
 	"crypto/tls"
+	"log"
 	"net/http"
 
 	errors "github.com/go-openapi/errors"
@@ -12,6 +13,8 @@ import (
 
 	"github.com/balzaczyy/myhome/restapi/operations"
 	"github.com/balzaczyy/myhome/restapi/operations/health"
+
+	"rsc.io/letsencrypt"
 )
 
 //go:generate swagger generate server --target .. --name Myhome --spec ../swagger.yaml
@@ -46,6 +49,11 @@ func configureAPI(api *operations.MyhomeAPI) http.Handler {
 // The TLS configuration before HTTPS server starts.
 func configureTLS(tlsConfig *tls.Config) {
 	// Make all necessary changes to the TLS configuration here.
+	var m letsencrypt.Manager
+	if err := m.CacheFile("letsencrypt.cache"); err != nil {
+		log.Fatal(err)
+	}
+	tlsConfig.GetCertificate = m.GetCertificate
 }
 
 // As soon as server is initialized but not run yet, this function will be called.
