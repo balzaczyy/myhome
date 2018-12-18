@@ -1,0 +1,42 @@
+swagger: "2.0"
+info:
+  title: KOZAN_
+  description: The API that supports my every need.
+  version: 1.0.0
+
+host: zhouyiyan.cn
+basePath: /v1
+schemes:
+- https
+
+paths:
+  /health:
+    get:
+      tags:
+      - health
+      operationId: getHealth
+      summary: Check the health for the site.
+      produces:
+      - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/HealthStatus'
+
+definitions:
+  HealthStatus:
+    properties:
+      status:
+        type: string
+  Error:
+    required:
+    - code
+    - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+
